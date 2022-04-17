@@ -1,0 +1,211 @@
+<html>
+<title> Random Ron Swanson Quote </title>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza Industries</title>
+    <link rel="icon" href="logo.png">
+
+    <!-- styles -->
+    <link rel="stylesheet" href="styles.css" />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+  />
+    <style>
+        .text {
+          color: black;  
+        }
+    </style>
+    <style>
+        
+        @import url(http://fonts.googleapis.com/css?family=Permanent+Marker:400,500);
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            vertical-align: baseline;
+        }
+        
+        div {
+            position: relative;
+            z-index: 2;
+        }
+        
+        body {
+            background-color: #333;
+            color: #333;
+            font-family: 'Permanent+Marker', sans-serif;
+            font-weight: 400;
+        }
+        
+        .footer {
+            width: 450px;
+            text-align: center;
+            display: block;
+            margin: 15px auto 30px auto;
+            font-size: 0.8em;
+            color: #fff;
+        }
+        
+        .footer a {
+            font-weight: 500;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .quote-box {
+            border-radius: 3px;
+            position: relative;
+            margin: 8% auto auto auto;
+            width: 450px;
+            padding: 40px 50px;
+            display: table;
+            background-color: #fff;
+        }
+        
+        .quote-box .quote-text {
+            text-align: center;
+            width: 450px;
+            height: auto;
+            clear: both;
+            font-weight: 500;
+            font-size: 2em;
+        }
+        
+        .quote-box .quote-text i {
+            font-size: 1.0em;
+            margin-right: 0.4em;
+        }
+        
+        .quote-box .quote-author {
+            width: 450px;
+            height: auto;
+            clear: both;
+            padding-top: 20px;
+            font-size: 1em;
+            text-align: right;
+        }
+        
+        .quote-box .buttons {
+            width: 450px;
+            margin: auto;
+            display: block;
+        }
+        
+        .quote-box .buttons .button {
+            height: 38px;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            background-color: #333;
+            outline: none;
+            font-size: 0.85em;
+            padding: 8px 18px 6px 18px;
+            margin-top: 30px;
+            opacity: 1;
+            cursor: pointer;
+        }
+        
+        .quote-box .buttons .button:hover {
+            opacity: 0.9;
+        }
+        
+        .quote-box .buttons .button#tweet-quote {
+            float: left;
+            padding: 0px;
+            padding-top: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            margin-right: 5px;
+            height: 30px;
+            width: 40px;
+        }
+        
+        .quote-box .buttons .button#new-quote {
+            float: right;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
+</head>
+
+<body>
+
+    <div class="quote-box">
+        <div class="quote-text">
+            <i class="fa fa-quote-left"> </i><span id="text"></span>
+        </div>
+        <div class="quote-author">
+            - <span id="author">Ron Swanson</span>
+        </div>
+        <div class="buttons">
+            <a href="http://twitter" class="button" id="tweet-quote" title="Tweet this quote!" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+
+            <button class="button" id="new-quote"> New Random Quote </button>
+        </div>
+    </div>
+    <button class="sidebar-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="logo.png" class="logo" alt="" />
+        <img src="Name.png" class="logo" alt="" />
+        <button class="close-btn"><i class="fas fa-times"></i></button>
+      </div>
+      <!-- links -->
+      <ul class="links">
+        <li>
+          <a href="index.html">home</a>
+        </li>
+        <li>
+          <a href="rocketdescent.html">rocket descent</a>
+        </li>
+        <li>
+          <a href="projects.html">ron swanson quotes</a>
+        </li>
+        <li>
+          <a href="inprogress.html">neural network</a>
+        </li>
+      </ul>
+      <!-- social media -->
+      
+    </aside>
+    <!-- javascript -->
+    <script src="app.js"></script>
+
+
+
+    <script>
+        var quoteButton = document.body.querySelector('#new-quote');
+        var quoteOutput = document.body.querySelector('#text');
+
+        function* quoteGenerator() {
+            yield fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes')
+                .then(res => res.json());
+        }
+
+        var generator = quoteGenerator();
+
+        function updateQuote() {
+            quoteButton.disabled = true;
+
+            generator.next().value.then(function(data) {
+                quoteOutput.innerHTML = `"${data[0]}"`;
+                document.body.querySelector('#tweet-quote').href = "https://twitter.com/intent/tweet?hashtags=quotes&text=" + `"${data[0]}"` + " - Ron Swanson";
+                quoteButton.disabled = false;
+            });
+        }
+
+        quoteButton.onclick = updateQuote;
+
+        updateQuote();
+    </script>
+</body>
+
+</html>
